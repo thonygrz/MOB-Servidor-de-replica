@@ -33,9 +33,6 @@ io.on("connection", function (socket) {
   });
 
   // replicar
-  // socket.on("GLOBAL_COMMIT", () => {
-  //   console.log("Comienza la restauración");
-  // });
   socket.on("disconnect", function () {
     console.log("A user disconnected");
   });
