@@ -27,15 +27,12 @@ io.on("connection", function (socket) {
   );
 
   // vote_request
-  socket.on("VOTE_REQUEST", (data) => {
-    if (data === "COMMIT") socket.emit("vote", "VOTE_COMMIT");
-    else if (data === "ABORT") socket.emit("vote", "VOTE_ABORT");
+  socket.on("VOTE_REQUEST", function (data, fn) {
+    if (data === "COMMIT") fn("VOTE_COMMIT");
+    else if (data === "ABORT") fn("VOTE_ABORT");
   });
 
   // replicar
-  // socket.on("GLOBAL_COMMIT", () => {
-  //   console.log("Comienza la restauración");
-  // });
   socket.on("disconnect", function () {
     console.log("A user disconnected");
   });
