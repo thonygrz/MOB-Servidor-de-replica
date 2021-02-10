@@ -32,6 +32,11 @@ io.on("connection", function (socket) {
     else if (data === "ABORT") fn("VOTE_ABORT");
   });
 
+  socket.on("GLOBAL_COMMIT", function (data, fn) {
+    // se replica
+    fn("Replica satisfactoria de la data: ", data);
+  });
+
   // replicar
   socket.on("disconnect", function () {
     console.log("A user disconnected");
