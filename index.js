@@ -34,7 +34,8 @@ io.on("connection", function (socket) {
 
   socket.on("GLOBAL_COMMIT", function (data, fn) {
     // se replica
-    fn("Replica satisfactoria de la data: ", data);
+    hacerReplica(data);
+    fn(data);
   });
 
   // replicar
@@ -49,35 +50,17 @@ http.listen(app.get("port"), () => {
 });
 
 function hacerReplica(data) {
-  let reg = [];
-  fs.readFile(process.env.DATABASE_URL, function (err, data) {
-    reg = JSON.parse(parser.toJson(data, { reversible: true }));
-    console.log("reg: ", reg);
-    if (reg.objetos && reg.objetos.objeto[1]) {
-      reg.objetos.objeto.push(data);
-    } else {
-      if (reg.objetos && reg.objetos.objeto) {
-        reg = {
-          objetos: {
-            objeto: [
-              {
-                nombre: reg.objetos.objeto.nombre,
-                fecha: reg.objetos.objeto.fecha,
-                accion: reg.objetos.objeto.accion,
-              },
-              data,
-            ],
-          },
-        };
-      } else {
-        reg = {
-          objetos: {
-            objeto: [data],
-          },
-        };
-      }
-    }
-    reg = parser.toXml(reg, { reversible: true });
-    fs.writeFile(process.env.DATABASE_URL, reg, () => {});
-  });
+  let reg;
+
+  console.log("OBJETOS A HACER REPLICA: ", data);
+
+  reg = parser.toXml(
+    {
+      objetos: {
+        objeto: data,
+      },
+    },
+    { reversible: true }
+  );
+  fs.writeFile(process.env.DATABASE_URL, reg, () => {});
 }
