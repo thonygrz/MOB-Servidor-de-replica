@@ -35,12 +35,18 @@ io.on("connection", function (socket) {
   socket.on("GLOBAL_COMMIT", function (data, fn) {
     // se replica
     hacerReplica(data);
-    fn(data);
+    fn("Se replicó la información correctamente");
+  });
+
+  socket.on("GLOBAL_ABORT", function (data, fn) {
+    // se desconecta el socket
+    fn("Se desconectó el socket correctamente");
+    socket.disconnect();
   });
 
   // replicar
   socket.on("disconnect", function () {
-    console.log("A user disconnected");
+    console.log("Se desconectó el socket correctamente");
   });
 });
 
