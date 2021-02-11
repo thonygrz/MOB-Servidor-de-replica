@@ -36,6 +36,7 @@ io.on("connection", function (socket) {
     // se replica
     hacerReplica(data);
     fn("Se replicó la información correctamente");
+    socket.disconnect();
   });
 
   socket.on("GLOBAL_ABORT", function (fn) {
@@ -44,10 +45,9 @@ io.on("connection", function (socket) {
     socket.disconnect();
   });
 
-  // replicar
-  socket.on("disconnect", function () {
-    console.log("Se desconectó el socket correctamente");
-  });
+  // socket.on("disconnect", function () {
+  //   console.log("Se desconectó el socket correctamente");
+  // });
 });
 
 http.listen(app.get("port"), () => {
