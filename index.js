@@ -20,6 +20,16 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api", router);
 app.set("port", process.env.PORT || 3000);
 
+let dato;
+
+function getDato() {
+  return dato;
+}
+
+function setDato(res) {
+  dato = res;
+}
+
 io.on("connection", function (socket) {
   console.log(
     "Usuario conectado al servidor de réplica",
@@ -48,20 +58,13 @@ io.on("connection", function (socket) {
   socket.on("recibirObjetos", function (fn) {
     console.log("dentro de restaurarObjetos");
 
-    fs.readFile(
-      process.env.DATABASE_URL,
-      fn(function (err, data) {
-        console.log("dentro de fn de readfile");
-        return JSON.parse(
-          parser.toJson(data, { reversible: true })
-        ).objetos.objeto;
-        // fn({
-        //   message: "Restauración exitosa",
-        //   data: reg,
-        // });
-        // return reg;
-      })
-    );
+    fs.readFile(process.env.DATABASE_URL, function (err, data) {
+      let xml_file = JSON.parse(parser.toJson(data, { reversible: true }))
+        .objetos.objeto;
+      setDato(xml_file);
+    });
+
+    fn(getDato());
 
     // se desconecta el socket
     socket.disconnect();
