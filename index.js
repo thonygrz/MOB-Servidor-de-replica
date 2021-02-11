@@ -38,7 +38,7 @@ io.on("connection", function (socket) {
     fn("Se replicó la información correctamente");
   });
 
-  socket.on("GLOBAL_ABORT", function (data, fn) {
+  socket.on("GLOBAL_ABORT", function (fn) {
     // se desconecta el socket
     fn("Se desconectó el socket correctamente");
     socket.disconnect();
