@@ -4,7 +4,7 @@ import cors from "cors";
 import path from "path";
 import router from "./routes";
 import dotenv from "dotenv";
-const fs = require("fs").promises;
+const fs = require("fs");
 import parser from "xml2json";
 
 dotenv.config();
@@ -55,17 +55,19 @@ io.on("connection", function (socket) {
     socket.disconnect();
   });
 
-  socket.on("recibirObjetos", async function (fn) {
+  socket.on("recibirObjetos", function (fn) {
     console.log("dentro de restaurarObjetos");
 
-    await fs.readFile(process.env.DATABASE_URL, function (err, data) {
+    fs.readFile(process.env.DATABASE_URL, function (err, data) {
       let xml_file = JSON.parse(parser.toJson(data, { reversible: true }))
         .objetos.objeto;
       setDato(xml_file);
     });
 
-    console.log("getDato: ", getDato());
-    fn(getDato());
+    setTimeout(() => {
+      console.log("getDato: ", getDato());
+      fn(getDato());
+    }, 1000);
 
     // se desconecta el socket
     socket.disconnect();
