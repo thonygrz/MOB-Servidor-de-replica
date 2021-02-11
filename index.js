@@ -67,10 +67,11 @@ io.on("connection", function (socket) {
     setTimeout(() => {
       console.log("getDato: ", getDato());
       fn(getDato());
-    }, 1000);
+      
+      // se desconecta el socket
+      socket.disconnect();
+    }, 3000);
 
-    // se desconecta el socket
-    socket.disconnect();
   });
 });
 
