@@ -58,12 +58,13 @@ io.on("connection", function (socket) {
   socket.on("recibirObjetos", function (fn) {
     console.log("dentro de restaurarObjetos");
 
-    fs.readFile(process.env.DATABASE_URL, function (err, data) {
-      let xml_file = JSON.parse(parser.toJson(data, { reversible: true }))
+    fs.readFile(process.env.DATABASE_URL, async function (err, data) {
+      let xml_file = await JSON.parse(parser.toJson(data, { reversible: true }))
         .objetos.objeto;
       setDato(xml_file);
     });
 
+    console.log("getDato: ", getDato());
     fn(getDato());
 
     // se desconecta el socket
