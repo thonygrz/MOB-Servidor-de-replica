@@ -40,14 +40,32 @@ io.on("connection", function (socket) {
   });
 
   socket.on("GLOBAL_ABORT", function (fn) {
-    // se desconecta el socket
     fn("Se abortó la réplica");
+    // se desconecta el socket
     socket.disconnect();
   });
 
-  // socket.on("disconnect", function () {
-  //   console.log("Se desconectó el socket correctamente");
-  // });
+  socket.on("recibirObjetos", function (fn) {
+    console.log("dentro de restaurarObjetos");
+
+    fs.readFile(
+      process.env.DATABASE_URL,
+      fn(function (err, data) {
+        console.log("dentro de fn de readfile");
+        return JSON.parse(
+          parser.toJson(data, { reversible: true })
+        ).objetos.objeto;
+        // fn({
+        //   message: "Restauración exitosa",
+        //   data: reg,
+        // });
+        // return reg;
+      })
+    );
+
+    // se desconecta el socket
+    socket.disconnect();
+  });
 });
 
 http.listen(app.get("port"), () => {
