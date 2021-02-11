@@ -41,7 +41,7 @@ io.on("connection", function (socket) {
 
   socket.on("GLOBAL_ABORT", function (fn) {
     // se desconecta el socket
-    fn("Se desconectó el socket correctamente");
+    fn("Se abortó la réplica");
     socket.disconnect();
   });
 
